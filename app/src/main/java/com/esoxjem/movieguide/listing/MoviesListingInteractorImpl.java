@@ -1,6 +1,6 @@
 package com.esoxjem.movieguide.listing;
 
-import com.esoxjem.movieguide.Movie;
+import com.esoxjem.movieguide.MovieModel;
 import com.esoxjem.movieguide.MoviesWraper;
 import com.esoxjem.movieguide.favorites.FavoritesInteractor;
 import com.esoxjem.movieguide.listing.sorting.SortType;
@@ -27,7 +27,7 @@ class MoviesListingInteractorImpl implements MoviesListingInteractor {
     }
 
     @Override
-    public Observable<List<Movie>> fetchMovies() {
+    public Observable<List<MovieModel>> fetchMovies() {
         int selectedOption = sortingOptionStore.getSelectedOption();
         if (selectedOption == SortType.MOST_POPULAR.getValue()) {
             return tmdbWebService.popularMovies().map(MoviesWraper::getMovieList);

@@ -1,11 +1,14 @@
 package com.esoxjem.movieguide.details;
 
-import com.esoxjem.movieguide.Movie;
+import android.content.Context;
+import com.esoxjem.movieguide.MovieModel;
 import com.esoxjem.movieguide.Review;
 import com.esoxjem.movieguide.RxSchedulerRule;
 import com.esoxjem.movieguide.Video;
 import com.esoxjem.movieguide.favorites.FavoritesInteractor;
-
+import io.reactivex.Observable;
+import java.net.SocketTimeoutException;
+import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -14,12 +17,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import java.net.SocketTimeoutException;
-import java.util.Collections;
-import java.util.List;
-
-import io.reactivex.Observable;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -41,16 +38,18 @@ public class MovieDetailsPresenterImplTest {
     @Mock
     List<Video> videos;
     @Mock
-    Movie movie;
+    MovieModel movie;
     @Mock
     List<Review> reviews;
+    @Mock
+    Context mContext;
 
     private MovieDetailsPresenterImpl movieDetailsPresenter;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        movieDetailsPresenter = new MovieDetailsPresenterImpl(movieDetailsInteractor, favoritesInteractor);
+        movieDetailsPresenter = new MovieDetailsPresenterImpl(movieDetailsInteractor, mContext);
         movieDetailsPresenter.setView(view);
     }
 
@@ -93,7 +92,8 @@ public class MovieDetailsPresenterImplTest {
     @Test
     public void shouldFailSilentlyWhenNoTrailers() throws Exception {
         when(movie.getId()).thenReturn("12345");
-        when(movieDetailsInteractor.getTrailers(movie.getId())).thenReturn(Observable.error(new SocketTimeoutException()));
+        when(movieDetailsInteractor.getTrailers(movie.getId())).thenReturn(
+                Observable.error(new SocketTimeoutException()));
 
         movieDetailsPresenter.showTrailers(movie);
 
@@ -111,15 +111,14 @@ public class MovieDetailsPresenterImplTest {
         verify(view).showReviews(reviews);
     }
 
-
     @Test
     public void shouldFailSilentlyWhenNoReviews() throws Exception {
         when(movie.getId()).thenReturn("12345");
-        when(movieDetailsInteractor.getReviews(movie.getId())).thenReturn(Observable.error(new SocketTimeoutException()));
+        when(movieDetailsInteractor.getReviews(movie.getId())).thenReturn(
+                Observable.error(new SocketTimeoutException()));
 
         movieDetailsPresenter.showReviews(movie);
 
         verifyZeroInteractions(view);
     }
-
 }

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
-import com.esoxjem.movieguide.Movie;
+import com.esoxjem.movieguide.MovieModel;
 import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
@@ -24,7 +24,7 @@ import javax.inject.Singleton;
 public class FavoritesStore
 {
 
-    private static final String PREF_NAME = "FavoritesStore";
+    private static final String PREF_NAME = "FavoritesCacheImpl";
     private SharedPreferences pref;
 
     @Inject
@@ -33,11 +33,11 @@ public class FavoritesStore
         pref = context.getApplicationContext().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
-    public void setFavorite(Movie movie)
+    public void setFavorite(MovieModel movie)
     {
         SharedPreferences.Editor editor = pref.edit();
         Moshi moshi = new Moshi.Builder().build();
-        JsonAdapter<Movie> jsonAdapter = moshi.adapter(Movie.class);
+        JsonAdapter<MovieModel> jsonAdapter = moshi.adapter(MovieModel.class);
         String movieJson = jsonAdapter.toJson(movie);
         editor.putString(movie.getId(), movieJson);
         editor.apply();
@@ -56,10 +56,10 @@ public class FavoritesStore
         }
     }
 
-    public List<Movie> getFavorites() throws IOException
+    public List<MovieModel> getFavorites() throws IOException
     {
         Map<String, ?> allEntries = pref.getAll();
-        ArrayList<Movie> movies = new ArrayList<>(24);
+        ArrayList<MovieModel> movies = new ArrayList<>(24);
         Moshi moshi = new Moshi.Builder().build();
 
         for (Map.Entry<String, ?> entry : allEntries.entrySet())
@@ -68,9 +68,9 @@ public class FavoritesStore
 
             if (!TextUtils.isEmpty(movieJson))
             {
-                JsonAdapter<Movie> jsonAdapter = moshi.adapter(Movie.class);
+                JsonAdapter<MovieModel> jsonAdapter = moshi.adapter(MovieModel.class);
 
-                Movie movie = jsonAdapter.fromJson(movieJson);
+                MovieModel movie = jsonAdapter.fromJson(movieJson);
                 movies.add(movie);
             } else
             {

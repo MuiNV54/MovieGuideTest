@@ -18,10 +18,10 @@ public class DetailsModule {
         return new MovieDetailsInteractorImpl(tmdbWebService);
     }
 
-    @Provides
-    @DetailsScope
-    MovieDetailsPresenter providePresenter(MovieDetailsInteractor detailsInteractor,
-                                           FavoritesInteractor favoritesInteractor) {
-        return new MovieDetailsPresenterImpl(detailsInteractor, favoritesInteractor);
-    }
+    //@Provides
+    //@DetailsScope
+    //MovieDetailsPresenter providePresenter(MovieDetailsInteractor detailsInteractor,
+    //                                       FavoritesInteractor favoritesInteractor) {
+    //    return new MovieDetailsPresenterImpl(detailsInteractor);
+    //}
 }

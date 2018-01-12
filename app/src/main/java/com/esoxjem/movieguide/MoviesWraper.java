@@ -11,13 +11,13 @@ import java.util.List;
 public class MoviesWraper {
 
     @SerializedName("results")
-    private List<Movie> movies;
+    private List<MovieModel> movies;
 
-    public List<Movie> getMovieList() {
+    public List<MovieModel> getMovieList() {
         return movies;
     }
 
-    public void setMovieList(List<Movie> movieList) {
+    public void setMovieList(List<MovieModel> movieList) {
         this.movies = movieList;
     }
 }

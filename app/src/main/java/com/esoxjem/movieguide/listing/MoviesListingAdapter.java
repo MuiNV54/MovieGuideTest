@@ -18,7 +18,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.esoxjem.movieguide.Api;
-import com.esoxjem.movieguide.Movie;
+import com.esoxjem.movieguide.MovieModel;
 import com.esoxjem.movieguide.R;
 
 import java.util.List;
@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
  * @author arun
  */
 public class MoviesListingAdapter extends RecyclerView.Adapter<MoviesListingAdapter.ViewHolder> {
-    private List<Movie> movies;
+    private List<MovieModel> movies;
     private Context context;
     private MoviesListingView view;
 
@@ -42,7 +42,7 @@ public class MoviesListingAdapter extends RecyclerView.Adapter<MoviesListingAdap
         @BindView(R.id.movie_name)
         TextView name;
 
-        public Movie movie;
+        public MovieModel movie;
 
         public ViewHolder(View root) {
             super(root);
@@ -55,7 +55,7 @@ public class MoviesListingAdapter extends RecyclerView.Adapter<MoviesListingAdap
         }
     }
 
-    public MoviesListingAdapter(List<Movie> movies, MoviesListingView moviesView) {
+    public MoviesListingAdapter(List<MovieModel> movies, MoviesListingView moviesView) {
         this.movies = movies;
         view = moviesView;
     }

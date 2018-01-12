@@ -1,6 +1,6 @@
 package com.esoxjem.movieguide.favorites;
 
-import com.esoxjem.movieguide.Movie;
+import com.esoxjem.movieguide.MovieModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ class FavoritesInteractorImpl implements FavoritesInteractor
     }
 
     @Override
-    public void setFavorite(Movie movie)
+    public void setFavorite(MovieModel movie)
     {
         favoritesStore.setFavorite(movie);
     }
@@ -31,7 +31,7 @@ class FavoritesInteractorImpl implements FavoritesInteractor
     }
 
     @Override
-    public List<Movie> getFavorites()
+    public List<MovieModel> getFavorites()
     {
         try
         {

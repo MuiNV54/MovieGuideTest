@@ -17,4 +17,10 @@ allprojects {
         jcenter()
         google()
     }
+
+    ext {
+        supportLibVersion = '26.1.0'
+        okhttpVersion = '3.9.0'
+        daggerVersion = '2.5'
+    }
 }

@@ -1,16 +1,20 @@
 package com.esoxjem.movieguide.details;
 
-import com.esoxjem.movieguide.Movie;
+import android.content.Context;
+import com.esoxjem.movieguide.MovieModel;
 import com.esoxjem.movieguide.Review;
 import com.esoxjem.movieguide.Video;
-import com.esoxjem.movieguide.favorites.FavoritesInteractor;
+import com.esoxjem.movieguide.mapper.MovieModelDataMapper;
 import com.esoxjem.movieguide.util.RxUtils;
-
-import java.util.List;
-
+import com.example.data.cache.FavoritesCacheImpl;
+import com.example.data.entity.mapper.MovieEntityDataMapper;
+import com.example.data.repository.MovieDataRepository;
+import com.example.data.repository.datasource.MovieDataSourceFactory;
+import com.example.domain.interactor.FavoriteUseCase;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import java.util.List;
 
 /**
  * @author arun
@@ -18,13 +22,17 @@ import io.reactivex.schedulers.Schedulers;
 class MovieDetailsPresenterImpl implements MovieDetailsPresenter {
     private MovieDetailsView view;
     private MovieDetailsInteractor movieDetailsInteractor;
-    private FavoritesInteractor favoritesInteractor;
+    private FavoriteUseCase mFavoriteUseCase;
     private Disposable trailersSubscription;
     private Disposable reviewSubscription;
+    private MovieModelDataMapper mMovieModelDataMapper;
 
-    MovieDetailsPresenterImpl(MovieDetailsInteractor movieDetailsInteractor, FavoritesInteractor favoritesInteractor) {
+    MovieDetailsPresenterImpl(MovieDetailsInteractor movieDetailsInteractor, Context context) {
         this.movieDetailsInteractor = movieDetailsInteractor;
-        this.favoritesInteractor = favoritesInteractor;
+        this.mFavoriteUseCase = new FavoriteUseCase(
+                new MovieDataRepository(new MovieDataSourceFactory(new FavoritesCacheImpl(context)),
+                        new MovieEntityDataMapper()));
+        mMovieModelDataMapper = new MovieModelDataMapper();
     }
 
     @Override
@@ -39,7 +47,7 @@ class MovieDetailsPresenterImpl implements MovieDetailsPresenter {
     }
 
     @Override
-    public void showDetails(Movie movie) {
+    public void showDetails(MovieModel movie) {
         if (isViewAttached()) {
             view.showDetails(movie);
         }
@@ -50,7 +58,7 @@ class MovieDetailsPresenterImpl implements MovieDetailsPresenter {
     }
 
     @Override
-    public void showTrailers(Movie movie) {
+    public void showTrailers(MovieModel movie) {
         trailersSubscription = movieDetailsInteractor.getTrailers(movie.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -68,8 +76,9 @@ class MovieDetailsPresenterImpl implements MovieDetailsPresenter {
     }
 
     @Override
-    public void showReviews(Movie movie) {
-        reviewSubscription = movieDetailsInteractor.getReviews(movie.getId()).subscribeOn(Schedulers.io())
+    public void showReviews(MovieModel movie) {
+        reviewSubscription = movieDetailsInteractor.getReviews(movie.getId())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onGetReviewsSuccess, t -> onGetReviewsFailure());
     }
@@ -85,8 +94,8 @@ class MovieDetailsPresenterImpl implements MovieDetailsPresenter {
     }
 
     @Override
-    public void showFavoriteButton(Movie movie) {
-        boolean isFavorite = favoritesInteractor.isFavorite(movie.getId());
+    public void showFavoriteButton(MovieModel movie) {
+        boolean isFavorite = mFavoriteUseCase.isFavorite(movie.getId());
         if (isViewAttached()) {
             if (isFavorite) {
                 view.showFavorited();
@@ -97,14 +106,14 @@ class MovieDetailsPresenterImpl implements MovieDetailsPresenter {
     }
 
     @Override
-    public void onFavoriteClick(Movie movie) {
+    public void onFavoriteClick(MovieModel movie) {
         if (isViewAttached()) {
-            boolean isFavorite = favoritesInteractor.isFavorite(movie.getId());
+            boolean isFavorite = mFavoriteUseCase.isFavorite(movie.getId());
             if (isFavorite) {
-                favoritesInteractor.unFavorite(movie.getId());
+                mFavoriteUseCase.unFavorite(movie.getId());
                 view.showUnFavorited();
             } else {
-                favoritesInteractor.setFavorite(movie);
+                mFavoriteUseCase.setFavorite(mMovieModelDataMapper.transformModel(movie));
                 view.showFavorited();
             }
         }

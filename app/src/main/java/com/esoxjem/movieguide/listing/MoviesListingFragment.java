@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.esoxjem.movieguide.BaseApplication;
-import com.esoxjem.movieguide.Movie;
+import com.esoxjem.movieguide.MovieModel;
 import com.esoxjem.movieguide.R;
 import com.esoxjem.movieguide.listing.sorting.SortingDialogFragment;
 
@@ -37,7 +37,7 @@ public class MoviesListingFragment extends Fragment implements MoviesListingView
     RecyclerView moviesListing;
 
     private RecyclerView.Adapter adapter;
-    private List<Movie> movies = new ArrayList<>(20);
+    private List<MovieModel> movies = new ArrayList<>(20);
     private Callback callback;
     private Unbinder unbinder;
 
@@ -116,7 +116,7 @@ public class MoviesListingFragment extends Fragment implements MoviesListingView
     }
 
     @Override
-    public void showMovies(List<Movie> movies)
+    public void showMovies(List<MovieModel> movies)
     {
         this.movies.clear();
         this.movies.addAll(movies);
@@ -138,7 +138,7 @@ public class MoviesListingFragment extends Fragment implements MoviesListingView
     }
 
     @Override
-    public void onMovieClicked(Movie movie)
+    public void onMovieClicked(MovieModel movie)
     {
         callback.onMovieClicked(movie);
     }
@@ -167,8 +167,8 @@ public class MoviesListingFragment extends Fragment implements MoviesListingView
 
     public interface Callback
     {
-        void onMoviesLoaded(Movie movie);
+        void onMoviesLoaded(MovieModel movie);
 
-        void onMovieClicked(Movie movie);
+        void onMovieClicked(MovieModel movie);
     }
 }

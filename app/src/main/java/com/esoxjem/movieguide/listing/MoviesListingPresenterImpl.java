@@ -1,6 +1,6 @@
 package com.esoxjem.movieguide.listing;
 
-import com.esoxjem.movieguide.Movie;
+import com.esoxjem.movieguide.MovieModel;
 import com.esoxjem.movieguide.util.RxUtils;
 
 import java.util.List;
@@ -48,7 +48,7 @@ class MoviesListingPresenterImpl implements MoviesListingPresenter {
         }
     }
 
-    private void onMovieFetchSuccess(List<Movie> movies) {
+    private void onMovieFetchSuccess(List<MovieModel> movies) {
         if (isViewAttached()) {
             view.showMovies(movies);
         }

@@ -1,6 +1,6 @@
 package com.esoxjem.movieguide.listing;
 
-import com.esoxjem.movieguide.Movie;
+import com.esoxjem.movieguide.MovieModel;
 import com.esoxjem.movieguide.RxSchedulerRule;
 
 import org.junit.After;
@@ -30,7 +30,7 @@ public class MoviesListingPresenterImplTest {
     @Mock
     private MoviesListingView view;
     @Mock
-    private List<Movie> movies;
+    private List<MovieModel> movies;
 
     private MoviesListingPresenterImpl presenter;
 
@@ -47,7 +47,7 @@ public class MoviesListingPresenterImplTest {
     @Test
     public void shouldBeAbleToDisplayMovies() {
         // given:
-        Observable<List<Movie>> responseObservable = Observable.just(movies);
+        Observable<List<MovieModel>> responseObservable = Observable.just(movies);
         when(interactor.fetchMovies()).thenReturn(responseObservable);
 
         // when:

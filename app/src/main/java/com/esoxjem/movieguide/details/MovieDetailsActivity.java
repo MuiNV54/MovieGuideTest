@@ -7,7 +7,7 @@ import android.view.MenuItem;
 
 import com.esoxjem.movieguide.R;
 import com.esoxjem.movieguide.Constants;
-import com.esoxjem.movieguide.Movie;
+import com.esoxjem.movieguide.MovieModel;
 
 public class MovieDetailsActivity extends AppCompatActivity
 {
@@ -22,7 +22,7 @@ public class MovieDetailsActivity extends AppCompatActivity
             Bundle extras = getIntent().getExtras();
             if (extras != null && extras.containsKey(Constants.MOVIE))
             {
-                Movie movie = extras.getParcelable(Constants.MOVIE);
+                MovieModel movie = extras.getParcelable(Constants.MOVIE);
                 if (movie != null)
                 {
                     MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.getInstance(movie);

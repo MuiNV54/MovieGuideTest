@@ -1,6 +1,6 @@
 package com.esoxjem.movieguide.listing;
 
-import com.esoxjem.movieguide.Movie;
+import com.esoxjem.movieguide.MovieModel;
 
 import java.util.List;
 
@@ -9,8 +9,8 @@ import java.util.List;
  */
 interface MoviesListingView
 {
-    void showMovies(List<Movie> movies);
+    void showMovies(List<MovieModel> movies);
     void loadingStarted();
     void loadingFailed(String errorMessage);
-    void onMovieClicked(Movie movie);
+    void onMovieClicked(MovieModel movie);
 }

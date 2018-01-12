@@ -10,7 +10,7 @@ import com.esoxjem.movieguide.R;
 import com.esoxjem.movieguide.Constants;
 import com.esoxjem.movieguide.details.MovieDetailsActivity;
 import com.esoxjem.movieguide.details.MovieDetailsFragment;
-import com.esoxjem.movieguide.Movie;
+import com.esoxjem.movieguide.MovieModel;
 
 public class MoviesListingActivity extends AppCompatActivity implements MoviesListingFragment.Callback
 {
@@ -60,7 +60,7 @@ public class MoviesListingActivity extends AppCompatActivity implements MoviesLi
     }
 
     @Override
-    public void onMoviesLoaded(Movie movie)
+    public void onMoviesLoaded(MovieModel movie)
     {
         if(twoPaneMode)
         {
@@ -72,7 +72,7 @@ public class MoviesListingActivity extends AppCompatActivity implements MoviesLi
     }
 
     @Override
-    public void onMovieClicked(Movie movie)
+    public void onMovieClicked(MovieModel movie)
     {
         if (twoPaneMode)
         {
@@ -83,7 +83,7 @@ public class MoviesListingActivity extends AppCompatActivity implements MoviesLi
         }
     }
 
-    private void startMovieActivity(Movie movie)
+    private void startMovieActivity(MovieModel movie)
     {
         Intent intent = new Intent(this, MovieDetailsActivity.class);
         Bundle extras = new Bundle();
@@ -92,7 +92,7 @@ public class MoviesListingActivity extends AppCompatActivity implements MoviesLi
         startActivity(intent);
     }
 
-    private void loadMovieFragment(Movie movie)
+    private void loadMovieFragment(MovieModel movie)
     {
         MovieDetailsFragment movieDetailsFragment = MovieDetailsFragment.getInstance(movie);
         getSupportFragmentManager().beginTransaction()

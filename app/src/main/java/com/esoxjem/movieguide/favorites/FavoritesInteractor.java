@@ -1,6 +1,6 @@
 package com.esoxjem.movieguide.favorites;
 
-import com.esoxjem.movieguide.Movie;
+import com.esoxjem.movieguide.MovieModel;
 
 import java.util.List;
 
@@ -9,8 +9,8 @@ import java.util.List;
  */
 public interface FavoritesInteractor
 {
-    void setFavorite(Movie movie);
+    void setFavorite(MovieModel movie);
     boolean isFavorite(String id);
-    List<Movie> getFavorites();
+    List<MovieModel> getFavorites();
     void unFavorite(String id);
 }

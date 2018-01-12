@@ -1,21 +1,21 @@
 package com.esoxjem.movieguide.details;
 
-import com.esoxjem.movieguide.Movie;
+import com.esoxjem.movieguide.MovieModel;
 
 /**
  * @author arun
  */
 public interface MovieDetailsPresenter
 {
-    void showDetails(Movie movie);
+    void showDetails(MovieModel movie);
 
-    void showTrailers(Movie movie);
+    void showTrailers(MovieModel movie);
 
-    void showReviews(Movie movie);
+    void showReviews(MovieModel movie);
 
-    void showFavoriteButton(Movie movie);
+    void showFavoriteButton(MovieModel movie);
 
-    void onFavoriteClick(Movie movie);
+    void onFavoriteClick(MovieModel movie);
 
     void setView(MovieDetailsView view);
 
