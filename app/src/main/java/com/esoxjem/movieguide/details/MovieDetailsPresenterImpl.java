@@ -1,14 +1,17 @@
 package com.esoxjem.movieguide.details;
 
 import com.esoxjem.movieguide.MovieModel;
-import com.esoxjem.movieguide.Review;
-import com.esoxjem.movieguide.Video;
+import com.esoxjem.movieguide.ReviewModel;
+import com.esoxjem.movieguide.VideoModel;
 import com.esoxjem.movieguide.mapper.MovieModelDataMapper;
-import com.esoxjem.movieguide.util.RxUtils;
+import com.esoxjem.movieguide.mapper.ReviewModelDataMapper;
+import com.esoxjem.movieguide.mapper.VideoModelDataMapper;
+import com.example.domain.Review;
+import com.example.domain.Video;
 import com.example.domain.interactor.FavoriteUseCase;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import com.example.domain.interactor.GetReviews;
+import com.example.domain.interactor.GetTrailers;
+import io.reactivex.observers.DisposableObserver;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -17,29 +20,28 @@ import javax.inject.Inject;
  */
 class MovieDetailsPresenterImpl implements MovieDetailsPresenter {
     private MovieDetailsView view;
-    private MovieDetailsInteractor movieDetailsInteractor;
     private FavoriteUseCase mFavoriteUseCase;
-    private Disposable trailersSubscription;
-    private Disposable reviewSubscription;
     private MovieModelDataMapper mMovieModelDataMapper;
+    private VideoModelDataMapper mVideoModelDataMapper;
+    private ReviewModelDataMapper mReviewModelDataMapper;
+    private GetTrailers mGetTrailers;
+    private GetReviews mGetReviews;
 
     @Inject
-    MovieDetailsPresenterImpl(MovieDetailsInteractor movieDetailsInteractor,
-            FavoriteUseCase favoriteUseCase, MovieModelDataMapper modelDataMapper) {
-        this.movieDetailsInteractor = movieDetailsInteractor;
+    MovieDetailsPresenterImpl(FavoriteUseCase favoriteUseCase, MovieModelDataMapper modelDataMapper,
+            GetTrailers getTrailers, VideoModelDataMapper videoModelDataMapper,
+            GetReviews getReviews, ReviewModelDataMapper reviewModelDataMapper) {
         mFavoriteUseCase = favoriteUseCase;
         mMovieModelDataMapper = modelDataMapper;
+        mGetTrailers = getTrailers;
+        mVideoModelDataMapper = videoModelDataMapper;
+        mGetReviews = getReviews;
+        mReviewModelDataMapper = reviewModelDataMapper;
     }
 
     @Override
     public void setView(MovieDetailsView view) {
         this.view = view;
-    }
-
-    @Override
-    public void destroy() {
-        view = null;
-        RxUtils.unsubscribe(trailersSubscription, reviewSubscription);
     }
 
     @Override
@@ -55,13 +57,25 @@ class MovieDetailsPresenterImpl implements MovieDetailsPresenter {
 
     @Override
     public void showTrailers(MovieModel movie) {
-        trailersSubscription = movieDetailsInteractor.getTrailers(movie.getId())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onGetTrailersSuccess, t -> onGetTrailersFailure());
+        mGetTrailers.execute(new DisposableObserver<List<Video>>() {
+            @Override
+            public void onNext(List<Video> videos) {
+                onGetTrailersSuccess(mVideoModelDataMapper.transform(videos));
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        }, GetTrailers.Params.forUser(movie.getId()));
     }
 
-    private void onGetTrailersSuccess(List<Video> videos) {
+    private void onGetTrailersSuccess(List<VideoModel> videos) {
         if (isViewAttached()) {
             view.showTrailers(videos);
         }
@@ -73,13 +87,25 @@ class MovieDetailsPresenterImpl implements MovieDetailsPresenter {
 
     @Override
     public void showReviews(MovieModel movie) {
-        reviewSubscription = movieDetailsInteractor.getReviews(movie.getId())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onGetReviewsSuccess, t -> onGetReviewsFailure());
+        mGetReviews.execute(new DisposableObserver<List<Review>>() {
+            @Override
+            public void onNext(List<Review> reviews) {
+                onGetReviewsSuccess(mReviewModelDataMapper.transform(reviews));
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        }, movie.getId());
     }
 
-    private void onGetReviewsSuccess(List<Review> reviews) {
+    private void onGetReviewsSuccess(List<ReviewModel> reviews) {
         if (isViewAttached()) {
             view.showReviews(reviews);
         }
@@ -113,5 +139,22 @@ class MovieDetailsPresenterImpl implements MovieDetailsPresenter {
                 view.showFavorited();
             }
         }
+    }
+
+    @Override
+    public void onResume() {
+
+    }
+
+    @Override
+    public void onPause() {
+
+    }
+
+    @Override
+    public void onDestroy() {
+        view = null;
+        mGetTrailers.dispose();
+        mGetReviews.dispose();
     }
 }

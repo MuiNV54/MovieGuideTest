@@ -8,22 +8,21 @@ import com.google.gson.annotations.SerializedName;
 /**
  * @author arun
  */
-public class Video implements Parcelable {
+public class VideoModel implements Parcelable {
     public static final String SITE_YOUTUBE = "YouTube";
 
     private String id;
     private String name;
     private String site;
-    @SerializedName("key")
     private String videoId;
     private int size;
     private String type;
 
-    public Video() {
+    public VideoModel() {
 
     }
 
-    protected Video(Parcel in) {
+    protected VideoModel(Parcel in) {
         id = in.readString();
         name = in.readString();
         site = in.readString();
@@ -32,19 +31,19 @@ public class Video implements Parcelable {
         type = in.readString();
     }
 
-    public static final Creator<Video> CREATOR = new Creator<Video>() {
+    public static final Creator<VideoModel> CREATOR = new Creator<VideoModel>() {
         @Override
-        public Video createFromParcel(Parcel in) {
-            return new Video(in);
+        public VideoModel createFromParcel(Parcel in) {
+            return new VideoModel(in);
         }
 
         @Override
-        public Video[] newArray(int size) {
-            return new Video[size];
+        public VideoModel[] newArray(int size) {
+            return new VideoModel[size];
         }
     };
 
-    public static String getUrl(Video video) {
+    public static String getUrl(VideoModel video) {
         if (SITE_YOUTUBE.equalsIgnoreCase(video.getSite())) {
             return String.format(Api.YOUTUBE_VIDEO_URL, video.getVideoId());
         } else {
@@ -52,7 +51,7 @@ public class Video implements Parcelable {
         }
     }
 
-    public static String getThumbnailUrl(Video video) {
+    public static String getThumbnailUrl(VideoModel video) {
         if (SITE_YOUTUBE.equalsIgnoreCase(video.getSite())) {
             return String.format(Api.YOUTUBE_THUMBNAIL_URL, video.getVideoId());
         } else {

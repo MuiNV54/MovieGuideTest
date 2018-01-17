@@ -147,7 +147,7 @@ public class MoviesListingFragment extends Fragment implements MoviesListingView
     public void onDestroyView()
     {
         super.onDestroyView();
-        moviesPresenter.destroy();
+        moviesPresenter.onDestroy();
         unbinder.unbind();
     }
 

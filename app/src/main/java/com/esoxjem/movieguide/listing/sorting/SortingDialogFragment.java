@@ -128,7 +128,7 @@ public class SortingDialogFragment extends DialogFragment implements SortingDial
     public void onDestroyView()
     {
         super.onDestroyView();
-        sortingDialogPresenter.destroy();
+        sortingDialogPresenter.onDestroy();
         unbinder.unbind();
     }
 }

@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,8 +31,8 @@ import com.esoxjem.movieguide.BaseApplication;
 import com.esoxjem.movieguide.Constants;
 import com.esoxjem.movieguide.MovieModel;
 import com.esoxjem.movieguide.R;
-import com.esoxjem.movieguide.Review;
-import com.esoxjem.movieguide.Video;
+import com.esoxjem.movieguide.ReviewModel;
+import com.esoxjem.movieguide.VideoModel;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -148,7 +149,7 @@ public class MovieDetailsFragment extends Fragment
     }
 
     @Override
-    public void showTrailers(List<Video> trailers) {
+    public void showTrailers(List<VideoModel> trailers) {
         if (trailers.isEmpty()) {
             label.setVisibility(View.GONE);
             this.trailers.setVisibility(View.GONE);
@@ -164,23 +165,27 @@ public class MovieDetailsFragment extends Fragment
                     .centerCrop()
                     .override(150, 150);
 
-            for (Video trailer : trailers) {
+            for (VideoModel trailer : trailers) {
                 View thumbContainer = inflater.inflate(R.layout.video, this.trailers, false);
                 ImageView thumbView = ButterKnife.findById(thumbContainer, R.id.video_thumb);
-                thumbView.setTag(Video.getUrl(trailer));
+                thumbView.setTag(VideoModel.getUrl(trailer));
                 thumbView.requestLayout();
                 thumbView.setOnClickListener(this);
-                Glide.with(getContext())
-                        .load(Video.getThumbnailUrl(trailer))
-                        .apply(options)
-                        .into(thumbView);
-                this.trailers.addView(thumbContainer);
+                try {
+                    Glide.with(getContext())
+                            .load(VideoModel.getThumbnailUrl(trailer))
+                            .apply(options)
+                            .into(thumbView);
+                    this.trailers.addView(thumbContainer);
+                } catch (IllegalArgumentException ex) {
+                    Log.wtf("Glide-tag", String.valueOf(thumbView.getTag()));
+                }
             }
         }
     }
 
     @Override
-    public void showReviews(List<Review> reviews) {
+    public void showReviews(List<ReviewModel> reviews) {
         if (reviews.isEmpty()) {
             this.reviews.setVisibility(View.GONE);
             reviewsContainer.setVisibility(View.GONE);
@@ -190,7 +195,7 @@ public class MovieDetailsFragment extends Fragment
 
             reviewsContainer.removeAllViews();
             LayoutInflater inflater = getActivity().getLayoutInflater();
-            for (Review review : reviews) {
+            for (ReviewModel review : reviews) {
                 ViewGroup reviewContainer =
                         (ViewGroup) inflater.inflate(R.layout.review, reviewsContainer, false);
                 TextView reviewAuthor = ButterKnife.findById(reviewContainer, R.id.review_author);
@@ -256,7 +261,7 @@ public class MovieDetailsFragment extends Fragment
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        movieDetailsPresenter.destroy();
+        movieDetailsPresenter.onDestroy();
         unbinder.unbind();
     }
 

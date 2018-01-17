@@ -1,10 +1,11 @@
 package com.esoxjem.movieguide.listing.sorting;
 
+import com.esoxjem.movieguide.BasePresenter;
+
 /**
  * @author arun
  */
-public interface SortingDialogPresenter
-{
+public interface SortingDialogPresenter extends BasePresenter {
     void setLastSavedOption();
 
     void onPopularMoviesSelected();
@@ -14,6 +15,4 @@ public interface SortingDialogPresenter
     void onFavoritesSelected();
 
     void setView(SortingDialogView view);
-
-    void destroy();
 }

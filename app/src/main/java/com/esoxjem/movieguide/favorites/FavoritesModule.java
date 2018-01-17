@@ -4,6 +4,8 @@ import com.esoxjem.movieguide.AppModule;
 import com.example.data.cache.FavoritesCache;
 import com.example.data.cache.FavoritesCacheImpl;
 import com.example.data.repository.MovieDataRepository;
+import com.example.data.repository.datasource.RemoteMovieDataSource;
+import com.example.data.repository.datasource.RemoteMovieDataSourceImpl;
 import com.example.domain.interactor.FavoriteUseCase;
 import com.example.domain.repository.MovieRepository;
 import dagger.Module;
@@ -32,5 +34,12 @@ public class FavoritesModule {
     @Singleton
     FavoriteUseCase provideFavoriteUseCase(MovieRepository movieRepository) {
         return new FavoriteUseCase(movieRepository);
+    }
+
+    @Provides
+    @Singleton
+    RemoteMovieDataSource provideRemoteMovieDataSource(
+            RemoteMovieDataSourceImpl remoteMovieDataSource) {
+        return remoteMovieDataSource;
     }
 }

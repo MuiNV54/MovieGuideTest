@@ -1,14 +1,12 @@
 package com.esoxjem.movieguide.network;
 
-
 import com.esoxjem.movieguide.BuildConfig;
-
-import java.util.concurrent.TimeUnit;
-
-import javax.inject.Singleton;
-
+import com.example.data.network.RequestInterceptor;
+import com.example.data.network.TmdbWebService;
 import dagger.Module;
 import dagger.Provides;
+import java.util.concurrent.TimeUnit;
+import javax.inject.Singleton;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -36,8 +34,8 @@ public class NetworkModule {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        return new okhttp3.OkHttpClient.Builder()
-                .connectTimeout(CONNECT_TIMEOUT_IN_MS, TimeUnit.MILLISECONDS)
+        return new okhttp3.OkHttpClient.Builder().connectTimeout(CONNECT_TIMEOUT_IN_MS,
+                TimeUnit.MILLISECONDS)
                 .addInterceptor(loggingInterceptor)
                 .addInterceptor(requestInterceptor)
                 .build();
@@ -46,9 +44,7 @@ public class NetworkModule {
     @Singleton
     @Provides
     Retrofit retrofit(OkHttpClient okHttpClient) {
-        return new Retrofit
-                .Builder()
-                .baseUrl(BuildConfig.TMDB_BASE_URL)
+        return new Retrofit.Builder().baseUrl(BuildConfig.TMDB_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient)
@@ -61,4 +57,9 @@ public class NetworkModule {
         return retrofit.create(TmdbWebService.class);
     }
 
+    @Singleton
+    @Provides
+    com.esoxjem.movieguide.network.TmdbWebService provideTmdbWebService(Retrofit retrofit) {
+        return retrofit.create(com.esoxjem.movieguide.network.TmdbWebService.class);
+    }
 }

@@ -1,10 +1,18 @@
 package com.example.data.repository;
 
+import com.example.data.ReviewEntity;
+import com.example.data.VideoEntity;
 import com.example.data.entity.mapper.MovieEntityDataMapper;
+import com.example.data.entity.mapper.ReviewModelDataMapper;
+import com.example.data.entity.mapper.VideoModelDataMapper;
 import com.example.data.repository.datasource.DiskMovieDataSource;
 import com.example.data.repository.datasource.MovieDataSourceFactory;
 import com.example.domain.Movie;
+import com.example.domain.Review;
+import com.example.domain.Video;
 import com.example.domain.repository.MovieRepository;
+import io.reactivex.Observable;
+import io.reactivex.functions.Function;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
@@ -16,12 +24,17 @@ import javax.inject.Inject;
 public class MovieDataRepository implements MovieRepository {
     private MovieDataSourceFactory mSourceFactory;
     private MovieEntityDataMapper mEntityDataMapper;
+    private ReviewModelDataMapper mReviewModelDataMapper;
+    private VideoModelDataMapper mVideoModelDataMapper;
 
     @Inject
     public MovieDataRepository(MovieDataSourceFactory sourceFactory,
-            MovieEntityDataMapper entityDataMapper) {
+            MovieEntityDataMapper entityDataMapper, ReviewModelDataMapper reviewModelDataMapper,
+            VideoModelDataMapper videoModelDataMapper) {
         mSourceFactory = sourceFactory;
         mEntityDataMapper = entityDataMapper;
+        mReviewModelDataMapper = reviewModelDataMapper;
+        mVideoModelDataMapper = videoModelDataMapper;
     }
 
     @Override
@@ -51,5 +64,29 @@ public class MovieDataRepository implements MovieRepository {
     public void unFavorite(String id) {
         final DiskMovieDataSource diskMovieDataSource = mSourceFactory.createDiskDataSource();
         diskMovieDataSource.unFavorite(id);
+    }
+
+    @Override
+    public Observable<List<Video>> getTrailers(String id) {
+        return mSourceFactory.createRemoteMovieDataSource()
+                .getTrailers(id)
+                .map(new Function<List<VideoEntity>, List<Video>>() {
+                    @Override
+                    public List<Video> apply(List<VideoEntity> videoEntities) throws Exception {
+                        return mVideoModelDataMapper.transform(videoEntities);
+                    }
+                });
+    }
+
+    @Override
+    public Observable<List<Review>> getReviews(String id) {
+        return mSourceFactory.createRemoteMovieDataSource()
+                .getReviews(id)
+                .map(new Function<List<ReviewEntity>, List<Review>>() {
+                    @Override
+                    public List<Review> apply(List<ReviewEntity> reviewEntities) throws Exception {
+                        return mReviewModelDataMapper.transform(reviewEntities);
+                    }
+                });
     }
 }

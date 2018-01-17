@@ -11,13 +11,13 @@ import java.util.List;
 public class VideoWrapper {
 
     @SerializedName("results")
-    private List<Video> videos;
+    private List<VideoModel> videos;
 
-    public List<Video> getVideos() {
+    public List<VideoModel> getVideos() {
         return videos;
     }
 
-    public void setVideos(List<Video> videos) {
+    public void setVideos(List<VideoModel> videos) {
         this.videos = videos;
     }
 

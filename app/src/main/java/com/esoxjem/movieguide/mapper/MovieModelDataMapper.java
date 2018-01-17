@@ -76,8 +76,8 @@ public class MovieModelDataMapper {
         return movie;
     }
 
-    public Collection<Movie> transformModel(Collection<MovieModel> movieModelCollection) {
-        Collection<Movie> movieCollection;
+    public List<Movie> transformModel(Collection<MovieModel> movieModelCollection) {
+        List<Movie> movieCollection;
 
         if (movieModelCollection != null && !movieModelCollection.isEmpty()) {
             movieCollection = new ArrayList<>();

@@ -1,6 +1,9 @@
 package com.example.domain.repository;
 
 import com.example.domain.Movie;
+import com.example.domain.Review;
+import com.example.domain.Video;
+import io.reactivex.Observable;
 import java.util.List;
 
 /**
@@ -15,4 +18,8 @@ public interface MovieRepository {
     List<Movie> getFavorites();
 
     void unFavorite(String id);
+
+    Observable<List<Video>> getTrailers(String id);
+
+    Observable<List<Review>> getReviews(String id);
 }

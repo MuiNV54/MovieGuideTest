@@ -1,6 +1,8 @@
 package com.example.data.network;
 
 import com.example.data.response.MoviesResponse;
+import com.example.data.response.ReviewsResponse;
+import com.example.data.response.VideoResponse;
 import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -14,8 +16,8 @@ public interface TmdbWebService {
     Observable<MoviesResponse> highestRatedMovies();
 
     @GET("3/movie/{movieId}/videos")
-    Observable<MoviesResponse> trailers(@Path("movieId") String movieId);
+    Observable<VideoResponse> trailers(@Path("movieId") String movieId);
 
     @GET("3/movie/{movieId}/reviews")
-    Observable<MoviesResponse> reviews(@Path("movieId") String movieId);
+    Observable<ReviewsResponse> reviews(@Path("movieId") String movieId);
 }

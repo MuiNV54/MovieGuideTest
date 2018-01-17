@@ -9,13 +9,20 @@ import javax.inject.Inject;
 
 public class MovieDataSourceFactory {
     private final FavoritesCache mFavoritesCache;
+    private final RemoteMovieDataSource mRemoteMovieDataSource;
 
     @Inject
-    public MovieDataSourceFactory(FavoritesCache favoritesCache) {
+    public MovieDataSourceFactory(FavoritesCache favoritesCache,
+            RemoteMovieDataSource remoteMovieDataSource) {
         mFavoritesCache = favoritesCache;
+        mRemoteMovieDataSource = remoteMovieDataSource;
     }
 
     public DiskMovieDataSource createDiskDataSource() {
         return new DiskMovieDataSourceImpl(mFavoritesCache);
+    }
+
+    public RemoteMovieDataSource createRemoteMovieDataSource() {
+        return mRemoteMovieDataSource;
     }
 }

@@ -28,12 +28,6 @@ class MoviesListingPresenterImpl implements MoviesListingPresenter {
     }
 
     @Override
-    public void destroy() {
-        view = null;
-        RxUtils.unsubscribe(fetchSubscription);
-    }
-
-    @Override
     public void displayMovies() {
         showLoading();
         fetchSubscription = moviesInteractor.fetchMovies()
@@ -60,5 +54,21 @@ class MoviesListingPresenterImpl implements MoviesListingPresenter {
 
     private boolean isViewAttached() {
         return view != null;
+    }
+
+    @Override
+    public void onResume() {
+
+    }
+
+    @Override
+    public void onPause() {
+
+    }
+
+    @Override
+    public void onDestroy() {
+        view = null;
+        RxUtils.unsubscribe(fetchSubscription);
     }
 }

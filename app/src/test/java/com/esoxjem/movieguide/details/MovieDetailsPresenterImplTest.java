@@ -2,9 +2,9 @@ package com.esoxjem.movieguide.details;
 
 import android.content.Context;
 import com.esoxjem.movieguide.MovieModel;
-import com.esoxjem.movieguide.Review;
+import com.esoxjem.movieguide.ReviewModel;
 import com.esoxjem.movieguide.RxSchedulerRule;
-import com.esoxjem.movieguide.Video;
+import com.esoxjem.movieguide.VideoModel;
 import io.reactivex.Observable;
 import java.net.SocketTimeoutException;
 import java.util.List;
@@ -35,11 +35,11 @@ public class MovieDetailsPresenterImplTest {
     @Mock
     private FavoritesInteractor favoritesInteractor;
     @Mock
-    List<Video> videos;
+    List<VideoModel> videos;
     @Mock
     MovieModel movie;
     @Mock
-    List<Review> reviews;
+    List<ReviewModel> reviews;
     @Mock
     Context mContext;
 
@@ -80,7 +80,7 @@ public class MovieDetailsPresenterImplTest {
     @Test
     public void shouldBeAbleToShowTrailers() {
         when(movie.getId()).thenReturn("12345");
-        Observable<List<Video>> responseObservable = Observable.just(videos);
+        Observable<List<VideoModel>> responseObservable = Observable.just(videos);
         when(movieDetailsInteractor.getTrailers(movie.getId())).thenReturn(responseObservable);
 
         movieDetailsPresenter.showTrailers(movie);
@@ -101,7 +101,7 @@ public class MovieDetailsPresenterImplTest {
 
     @Test
     public void shouldBeAbleToShowReviews() {
-        Observable<List<Review>> responseObservable = Observable.just(reviews);
+        Observable<List<ReviewModel>> responseObservable = Observable.just(reviews);
         when(movie.getId()).thenReturn("12345");
         when(movieDetailsInteractor.getReviews(movie.getId())).thenReturn(responseObservable);
 

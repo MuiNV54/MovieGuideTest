@@ -1,11 +1,12 @@
 package com.esoxjem.movieguide.details;
 
+import com.esoxjem.movieguide.BasePresenter;
 import com.esoxjem.movieguide.MovieModel;
 
 /**
  * @author arun
  */
-public interface MovieDetailsPresenter
+public interface MovieDetailsPresenter extends BasePresenter
 {
     void showDetails(MovieModel movie);
 
@@ -18,6 +19,4 @@ public interface MovieDetailsPresenter
     void onFavoriteClick(MovieModel movie);
 
     void setView(MovieDetailsView view);
-
-    void destroy();
 }

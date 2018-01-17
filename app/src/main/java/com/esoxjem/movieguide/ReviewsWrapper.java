@@ -11,13 +11,13 @@ import java.util.List;
 public class ReviewsWrapper {
 
     @SerializedName("results")
-    private List<Review> reviews;
+    private List<ReviewModel> reviews;
 
-    public List<Review> getReviews() {
+    public List<ReviewModel> getReviews() {
         return reviews;
     }
 
-    public void setReviews(List<Review> reviews) {
+    public void setReviews(List<ReviewModel> reviews) {
         this.reviews = reviews;
     }
 }
