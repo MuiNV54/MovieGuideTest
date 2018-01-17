@@ -1,8 +1,6 @@
 package com.esoxjem.movieguide.details;
 
-import com.esoxjem.movieguide.favorites.FavoritesInteractor;
 import com.esoxjem.movieguide.network.TmdbWebService;
-
 import dagger.Module;
 import dagger.Provides;
 
@@ -24,4 +22,10 @@ public class DetailsModule {
     //                                       FavoritesInteractor favoritesInteractor) {
     //    return new MovieDetailsPresenterImpl(detailsInteractor);
     //}
+
+    @Provides
+    @DetailsScope
+    MovieDetailsPresenter providePresenter(MovieDetailsPresenterImpl presenter) {
+        return presenter;
+    }
 }

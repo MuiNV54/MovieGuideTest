@@ -7,6 +7,7 @@ import com.example.domain.Movie;
 import com.example.domain.repository.MovieRepository;
 import java.io.IOException;
 import java.util.List;
+import javax.inject.Inject;
 
 /**
  * Created by nguyen.van.mui on 12/01/2018.
@@ -16,6 +17,7 @@ public class MovieDataRepository implements MovieRepository {
     private MovieDataSourceFactory mSourceFactory;
     private MovieEntityDataMapper mEntityDataMapper;
 
+    @Inject
     public MovieDataRepository(MovieDataSourceFactory sourceFactory,
             MovieEntityDataMapper entityDataMapper) {
         mSourceFactory = sourceFactory;

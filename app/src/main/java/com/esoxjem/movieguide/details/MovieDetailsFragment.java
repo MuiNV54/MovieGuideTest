@@ -37,9 +37,8 @@ import javax.inject.Inject;
 
 public class MovieDetailsFragment extends Fragment
         implements MovieDetailsView, View.OnClickListener {
-    @Inject
-    MovieDetailsInteractor mMovieDetailsInteractor;
 
+    @Inject
     MovieDetailsPresenter movieDetailsPresenter;
 
     @BindView(R.id.movie_poster)
@@ -95,8 +94,6 @@ public class MovieDetailsFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        movieDetailsPresenter =
-                new MovieDetailsPresenterImpl(mMovieDetailsInteractor, getActivity());
         View rootView = inflater.inflate(R.layout.fragment_movie_details, container, false);
         unbinder = ButterKnife.bind(this, rootView);
         setToolbar();

@@ -1,7 +1,7 @@
 package com.example.data.repository.datasource;
 
-import android.content.Context;
 import com.example.data.cache.FavoritesCache;
+import javax.inject.Inject;
 
 /**
  * Created by nguyen.van.mui on 12/01/2018.
@@ -10,6 +10,7 @@ import com.example.data.cache.FavoritesCache;
 public class MovieDataSourceFactory {
     private final FavoritesCache mFavoritesCache;
 
+    @Inject
     public MovieDataSourceFactory(FavoritesCache favoritesCache) {
         mFavoritesCache = favoritesCache;
     }

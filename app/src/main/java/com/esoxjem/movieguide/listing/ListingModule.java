@@ -1,9 +1,9 @@
 package com.esoxjem.movieguide.listing;
 
-import com.esoxjem.movieguide.favorites.FavoritesInteractor;
 import com.esoxjem.movieguide.listing.sorting.SortingOptionStore;
+import com.esoxjem.movieguide.mapper.MovieModelDataMapper;
 import com.esoxjem.movieguide.network.TmdbWebService;
-
+import com.example.domain.interactor.FavoriteUseCase;
 import dagger.Module;
 import dagger.Provides;
 
@@ -14,10 +14,11 @@ import dagger.Provides;
 @Module
 public class ListingModule {
     @Provides
-    MoviesListingInteractor provideMovieListingInteractor(FavoritesInteractor favoritesInteractor,
-                                                          TmdbWebService tmdbWebService,
-                                                          SortingOptionStore sortingOptionStore) {
-        return new MoviesListingInteractorImpl(favoritesInteractor, tmdbWebService, sortingOptionStore);
+    MoviesListingInteractor provideMovieListingInteractor(FavoriteUseCase favoriteUseCase,
+            TmdbWebService tmdbWebService, SortingOptionStore sortingOptionStore,
+            MovieModelDataMapper dataMapper) {
+        return new MoviesListingInteractorImpl(favoriteUseCase, tmdbWebService, sortingOptionStore,
+                dataMapper);
     }
 
     @Provides

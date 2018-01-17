@@ -20,9 +20,12 @@ import com.example.domain.Movie;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import javax.inject.Inject;
 
 public class MovieModelDataMapper {
 
+    @Inject
     public MovieModelDataMapper() {
     }
 
@@ -42,8 +45,8 @@ public class MovieModelDataMapper {
         return movieModel;
     }
 
-    public Collection<MovieModel> transform(Collection<Movie> moviesCollection) {
-        Collection<MovieModel> movieModelCollection;
+    public List<MovieModel> transform(Collection<Movie> moviesCollection) {
+        List<MovieModel> movieModelCollection;
 
         if (moviesCollection != null && !moviesCollection.isEmpty()) {
             movieModelCollection = new ArrayList<>();

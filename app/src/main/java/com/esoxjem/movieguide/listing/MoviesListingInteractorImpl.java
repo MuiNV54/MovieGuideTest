@@ -2,28 +2,29 @@ package com.esoxjem.movieguide.listing;
 
 import com.esoxjem.movieguide.MovieModel;
 import com.esoxjem.movieguide.MoviesWraper;
-import com.esoxjem.movieguide.favorites.FavoritesInteractor;
 import com.esoxjem.movieguide.listing.sorting.SortType;
 import com.esoxjem.movieguide.listing.sorting.SortingOptionStore;
+import com.esoxjem.movieguide.mapper.MovieModelDataMapper;
 import com.esoxjem.movieguide.network.TmdbWebService;
-
-import java.util.List;
-
+import com.example.domain.interactor.FavoriteUseCase;
 import io.reactivex.Observable;
+import java.util.List;
 
 /**
  * @author arun
  */
 class MoviesListingInteractorImpl implements MoviesListingInteractor {
-    private FavoritesInteractor favoritesInteractor;
+    private FavoriteUseCase mFavoriteUseCase;
     private TmdbWebService tmdbWebService;
     private SortingOptionStore sortingOptionStore;
+    private MovieModelDataMapper mModelDataMapper;
 
-    MoviesListingInteractorImpl(FavoritesInteractor favoritesInteractor,
-                                TmdbWebService tmdbWebService, SortingOptionStore store) {
-        this.favoritesInteractor = favoritesInteractor;
+    MoviesListingInteractorImpl(FavoriteUseCase favoriteUseCase, TmdbWebService tmdbWebService,
+            SortingOptionStore store, MovieModelDataMapper modelDataMapper) {
+        this.mFavoriteUseCase = favoriteUseCase;
         this.tmdbWebService = tmdbWebService;
         sortingOptionStore = store;
+        mModelDataMapper = modelDataMapper;
     }
 
     @Override
@@ -34,8 +35,7 @@ class MoviesListingInteractorImpl implements MoviesListingInteractor {
         } else if (selectedOption == SortType.HIGHEST_RATED.getValue()) {
             return tmdbWebService.highestRatedMovies().map(MoviesWraper::getMovieList);
         } else {
-            return Observable.just(favoritesInteractor.getFavorites());
+            return Observable.just(mModelDataMapper.transform(mFavoriteUseCase.getFavorites()));
         }
     }
-
 }

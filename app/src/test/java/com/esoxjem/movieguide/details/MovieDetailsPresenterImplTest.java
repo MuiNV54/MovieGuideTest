@@ -5,7 +5,6 @@ import com.esoxjem.movieguide.MovieModel;
 import com.esoxjem.movieguide.Review;
 import com.esoxjem.movieguide.RxSchedulerRule;
 import com.esoxjem.movieguide.Video;
-import com.esoxjem.movieguide.favorites.FavoritesInteractor;
 import io.reactivex.Observable;
 import java.net.SocketTimeoutException;
 import java.util.List;

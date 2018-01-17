@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.inject.Inject;
 
 /**
  * @author arun
@@ -19,6 +20,7 @@ public class FavoritesCacheImpl implements FavoritesCache {
     private static final String PREF_NAME = "FavoritesCacheImpl";
     private SharedPreferences pref;
 
+    @Inject
     public FavoritesCacheImpl(Context context) {
         pref = context.getApplicationContext()
                 .getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);

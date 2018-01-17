@@ -9,6 +9,7 @@ import java.util.List;
  */
 
 public class FavoriteUseCase {
+
     private final MovieRepository mMovieRepository;
 
     public FavoriteUseCase(MovieRepository movieRepository) {

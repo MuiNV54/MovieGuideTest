@@ -1,20 +1,16 @@
 package com.esoxjem.movieguide.details;
 
-import android.content.Context;
 import com.esoxjem.movieguide.MovieModel;
 import com.esoxjem.movieguide.Review;
 import com.esoxjem.movieguide.Video;
 import com.esoxjem.movieguide.mapper.MovieModelDataMapper;
 import com.esoxjem.movieguide.util.RxUtils;
-import com.example.data.cache.FavoritesCacheImpl;
-import com.example.data.entity.mapper.MovieEntityDataMapper;
-import com.example.data.repository.MovieDataRepository;
-import com.example.data.repository.datasource.MovieDataSourceFactory;
 import com.example.domain.interactor.FavoriteUseCase;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import java.util.List;
+import javax.inject.Inject;
 
 /**
  * @author arun
@@ -27,12 +23,12 @@ class MovieDetailsPresenterImpl implements MovieDetailsPresenter {
     private Disposable reviewSubscription;
     private MovieModelDataMapper mMovieModelDataMapper;
 
-    MovieDetailsPresenterImpl(MovieDetailsInteractor movieDetailsInteractor, Context context) {
+    @Inject
+    MovieDetailsPresenterImpl(MovieDetailsInteractor movieDetailsInteractor,
+            FavoriteUseCase favoriteUseCase, MovieModelDataMapper modelDataMapper) {
         this.movieDetailsInteractor = movieDetailsInteractor;
-        this.mFavoriteUseCase = new FavoriteUseCase(
-                new MovieDataRepository(new MovieDataSourceFactory(new FavoritesCacheImpl(context)),
-                        new MovieEntityDataMapper()));
-        mMovieModelDataMapper = new MovieModelDataMapper();
+        mFavoriteUseCase = favoriteUseCase;
+        mMovieModelDataMapper = modelDataMapper;
     }
 
     @Override

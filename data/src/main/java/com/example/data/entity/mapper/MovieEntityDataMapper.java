@@ -20,9 +20,11 @@ import com.example.domain.Movie;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import javax.inject.Inject;
 
 public class MovieEntityDataMapper {
 
+    @Inject
     public MovieEntityDataMapper() {
     }
 
