@@ -1,24 +1,26 @@
 package com.esoxjem.movieguide.listing;
 
 import com.esoxjem.movieguide.MovieModel;
-import com.esoxjem.movieguide.util.RxUtils;
-
+import com.esoxjem.movieguide.mapper.MovieModelDataMapper;
+import com.example.domain.Movie;
+import com.example.domain.interactor.FetchMovies;
+import io.reactivex.observers.DisposableObserver;
 import java.util.List;
-
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
+import javax.inject.Inject;
 
 /**
  * @author arun
  */
 class MoviesListingPresenterImpl implements MoviesListingPresenter {
     private MoviesListingView view;
-    private MoviesListingInteractor moviesInteractor;
-    private Disposable fetchSubscription;
+    private FetchMovies mFetchMovies;
+    private MovieModelDataMapper mModelDataMapper;
 
-    MoviesListingPresenterImpl(MoviesListingInteractor interactor) {
-        moviesInteractor = interactor;
+    @Inject
+    public MoviesListingPresenterImpl(FetchMovies fetchMovies,
+            MovieModelDataMapper modelDataMapper) {
+        mFetchMovies = fetchMovies;
+        mModelDataMapper = modelDataMapper;
     }
 
     @Override
@@ -30,10 +32,22 @@ class MoviesListingPresenterImpl implements MoviesListingPresenter {
     @Override
     public void displayMovies() {
         showLoading();
-        fetchSubscription = moviesInteractor.fetchMovies()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::onMovieFetchSuccess, this::onMovieFetchFailed);
+        mFetchMovies.execute(new DisposableObserver<List<Movie>>() {
+            @Override
+            public void onNext(List<Movie> movies) {
+                onMovieFetchSuccess(mModelDataMapper.transform(movies));
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                onMovieFetchFailed(e);
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        }, null);
     }
 
     private void showLoading() {
@@ -69,6 +83,6 @@ class MoviesListingPresenterImpl implements MoviesListingPresenter {
     @Override
     public void onDestroy() {
         view = null;
-        RxUtils.unsubscribe(fetchSubscription);
+        mFetchMovies.dispose();
     }
 }

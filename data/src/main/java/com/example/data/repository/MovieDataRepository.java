@@ -2,6 +2,7 @@ package com.example.data.repository;
 
 import com.example.data.ReviewEntity;
 import com.example.data.VideoEntity;
+import com.example.data.entity.MovieEntity;
 import com.example.data.entity.mapper.MovieEntityDataMapper;
 import com.example.data.entity.mapper.ReviewModelDataMapper;
 import com.example.data.entity.mapper.VideoModelDataMapper;
@@ -9,6 +10,7 @@ import com.example.data.repository.datasource.DiskMovieDataSource;
 import com.example.data.repository.datasource.MovieDataSourceFactory;
 import com.example.domain.Movie;
 import com.example.domain.Review;
+import com.example.domain.SortType;
 import com.example.domain.Video;
 import com.example.domain.repository.MovieRepository;
 import io.reactivex.Observable;
@@ -26,15 +28,18 @@ public class MovieDataRepository implements MovieRepository {
     private MovieEntityDataMapper mEntityDataMapper;
     private ReviewModelDataMapper mReviewModelDataMapper;
     private VideoModelDataMapper mVideoModelDataMapper;
+    private MovieEntityDataMapper mMovieEntityDataMapper;
 
     @Inject
     public MovieDataRepository(MovieDataSourceFactory sourceFactory,
             MovieEntityDataMapper entityDataMapper, ReviewModelDataMapper reviewModelDataMapper,
-            VideoModelDataMapper videoModelDataMapper) {
+            VideoModelDataMapper videoModelDataMapper,
+            MovieEntityDataMapper movieEntityDataMapper) {
         mSourceFactory = sourceFactory;
         mEntityDataMapper = entityDataMapper;
         mReviewModelDataMapper = reviewModelDataMapper;
         mVideoModelDataMapper = videoModelDataMapper;
+        mMovieEntityDataMapper = movieEntityDataMapper;
     }
 
     @Override
@@ -88,5 +93,35 @@ public class MovieDataRepository implements MovieRepository {
                         return mReviewModelDataMapper.transform(reviewEntities);
                     }
                 });
+    }
+
+    @Override
+    public Observable<List<Movie>> fetchMovies(SortType sortType) {
+        if (sortType == SortType.FAVORITES) {
+            try {
+                return Observable.just(mMovieEntityDataMapper.transform(
+                        mSourceFactory.createDiskDataSource().getFavorites()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return mSourceFactory.createRemoteMovieDataSource()
+                .fetchMovies(sortType)
+                .map(new Function<List<MovieEntity>, List<Movie>>() {
+                    @Override
+                    public List<Movie> apply(List<MovieEntity> movieEntities) throws Exception {
+                        return mMovieEntityDataMapper.transform(movieEntities);
+                    }
+                });
+    }
+
+    @Override
+    public int getSelectedSortingOption() {
+        return mSourceFactory.createDiskDataSource().getSelectedSortingOption();
+    }
+
+    @Override
+    public void setSortingOption(SortType sortType) {
+        mSourceFactory.createDiskDataSource().setSortingOption(sortType);
     }
 }

@@ -1,4 +1,4 @@
-package com.esoxjem.movieguide.listing.sorting;
+package com.example.domain;
 
 /**
  * @author arun

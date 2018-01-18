@@ -1,6 +1,8 @@
 package com.example.data.repository.datasource;
 
 import com.example.data.cache.FavoritesCache;
+import com.example.domain.SortType;
+import com.example.data.cache.SortingOptionStore;
 import com.example.data.entity.MovieEntity;
 import java.io.IOException;
 import java.util.List;
@@ -11,9 +13,12 @@ import java.util.List;
 
 public class DiskMovieDataSourceImpl implements DiskMovieDataSource {
     private final FavoritesCache mFavoritesCache;
+    private final SortingOptionStore mSortingOptionStore;
 
-    public DiskMovieDataSourceImpl(FavoritesCache favoritesCache) {
+    public DiskMovieDataSourceImpl(FavoritesCache favoritesCache,
+            SortingOptionStore sortingOptionStore) {
         mFavoritesCache = favoritesCache;
+        mSortingOptionStore = sortingOptionStore;
     }
 
     @Override
@@ -34,5 +39,15 @@ public class DiskMovieDataSourceImpl implements DiskMovieDataSource {
     @Override
     public void unFavorite(String id) {
         mFavoritesCache.unFavorite(id);
+    }
+
+    @Override
+    public int getSelectedSortingOption() {
+        return mSortingOptionStore.getSelectedOption();
+    }
+
+    @Override
+    public void setSortingOption(SortType sortType) {
+        mSortingOptionStore.setSelectedOption(sortType);
     }
 }

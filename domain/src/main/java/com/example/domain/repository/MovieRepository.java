@@ -2,6 +2,7 @@ package com.example.domain.repository;
 
 import com.example.domain.Movie;
 import com.example.domain.Review;
+import com.example.domain.SortType;
 import com.example.domain.Video;
 import io.reactivex.Observable;
 import java.util.List;
@@ -22,4 +23,10 @@ public interface MovieRepository {
     Observable<List<Video>> getTrailers(String id);
 
     Observable<List<Review>> getReviews(String id);
+
+    Observable<List<Movie>> fetchMovies(SortType sortType);
+
+    int getSelectedSortingOption();
+
+    void setSortingOption(SortType sortType);
 }

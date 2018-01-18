@@ -1,14 +1,19 @@
 package com.esoxjem.movieguide.listing.sorting;
 
+import com.example.domain.SortType;
+import com.example.domain.interactor.SortingUseCase;
+import javax.inject.Inject;
+
 /**
  * @author arun
  */
 class SortingDialogPresenterImpl implements SortingDialogPresenter {
     private SortingDialogView view;
-    private SortingDialogInteractor sortingDialogInteractor;
+    private SortingUseCase mSortingUseCase;
 
-    SortingDialogPresenterImpl(SortingDialogInteractor interactor) {
-        sortingDialogInteractor = interactor;
+    @Inject
+    public SortingDialogPresenterImpl(SortingUseCase sortingUseCase) {
+        mSortingUseCase = sortingUseCase;
     }
 
     @Override
@@ -19,7 +24,7 @@ class SortingDialogPresenterImpl implements SortingDialogPresenter {
     @Override
     public void setLastSavedOption() {
         if (isViewAttached()) {
-            int selectedOption = sortingDialogInteractor.getSelectedSortingOption();
+            int selectedOption = mSortingUseCase.getSelectedSortingOption();
 
             if (selectedOption == SortType.MOST_POPULAR.getValue()) {
                 view.setPopularChecked();
@@ -38,7 +43,7 @@ class SortingDialogPresenterImpl implements SortingDialogPresenter {
     @Override
     public void onPopularMoviesSelected() {
         if (isViewAttached()) {
-            sortingDialogInteractor.setSortingOption(SortType.MOST_POPULAR);
+            mSortingUseCase.setSortingOption(SortType.MOST_POPULAR);
             view.dismissDialog();
         }
     }
@@ -46,7 +51,7 @@ class SortingDialogPresenterImpl implements SortingDialogPresenter {
     @Override
     public void onHighestRatedMoviesSelected() {
         if (isViewAttached()) {
-            sortingDialogInteractor.setSortingOption(SortType.HIGHEST_RATED);
+            mSortingUseCase.setSortingOption(SortType.HIGHEST_RATED);
             view.dismissDialog();
         }
     }
@@ -54,7 +59,7 @@ class SortingDialogPresenterImpl implements SortingDialogPresenter {
     @Override
     public void onFavoritesSelected() {
         if (isViewAttached()) {
-            sortingDialogInteractor.setSortingOption(SortType.FAVORITES);
+            mSortingUseCase.setSortingOption(SortType.FAVORITES);
             view.dismissDialog();
         }
     }

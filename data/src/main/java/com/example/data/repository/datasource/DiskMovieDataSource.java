@@ -1,5 +1,6 @@
 package com.example.data.repository.datasource;
 
+import com.example.domain.SortType;
 import com.example.data.entity.MovieEntity;
 import java.io.IOException;
 import java.util.List;
@@ -16,4 +17,8 @@ public interface DiskMovieDataSource {
     List<MovieEntity> getFavorites() throws IOException;
 
     void unFavorite(String id);
+
+    int getSelectedSortingOption();
+
+    void setSortingOption(SortType sortType);
 }
