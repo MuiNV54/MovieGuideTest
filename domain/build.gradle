@@ -11,4 +11,8 @@ dependencies {
   implementation 'io.reactivex.rxjava2:rxjava:2.1.2'
   implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
   implementation "javax.inject:javax.inject:1"
+
+  testImplementation "junit:junit:4.12"
+  testImplementation "org.mockito:mockito-core:1.9.5"
+  testImplementation "org.assertj:assertj-core:1.7.1"
 }

@@ -31,6 +31,11 @@ android {
     buildConfigField "String", "TMDB_BASE_URL", "\"http://api.themoviedb.org/\""
   }
 
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
   buildTypes {
     release {
       minifyEnabled false
@@ -60,9 +65,13 @@ dependencies {
   implementation 'com.squareup.retrofit2:retrofit:2.3.0'
   implementation('com.squareup.retrofit2:converter-gson:2.3.0')
   implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-
   implementation 'com.android.support:appcompat-v7:26.1.0'
-  testImplementation 'junit:junit:4.12'
+
   androidTestImplementation 'com.android.support.test:runner:1.0.1'
   androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+  testImplementation "junit:junit:4.12"
+  testImplementation "org.mockito:mockito-core:1.9.5"
+  testImplementation "org.assertj:assertj-core:1.7.1"
+  testImplementation "org.robolectric:robolectric:3.1.1"
 }
